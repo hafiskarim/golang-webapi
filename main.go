@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"pustaka-api/book"
 	"pustaka-api/handler"
@@ -20,31 +19,66 @@ func main() {
 
 	db.AutoMigrate(&book.Book{})
 
+	bookRepository := book.NewRepository(db)
+	book := book.Book{
+		Title:       "Lord of The Rings Revision Edition",
+		Description: "Dark Fantasy Book",
+		Price:       250000,
+		Rating:      4,
+	}
+	bookRepository.Create(book)
+
+	// ===========
 	// CREATE DATA
+	// ===========
 	// book := book.Book{}
-	// book.Title = "Hobbits"
-	// book.Description = "Adventure Book"
-	// book.Price = 200000
-	// book.Rating = 4
+	// book.Title = "Harry Potter"
+	// book.Description = "Magic Book"
+	// book.Price = 100000
+	// book.Rating = 5
 	// err = db.Create(&book).Error
 	// if err != nil {
-	// 	fmt.Println("===================")
+	// 	fmt.Println("==========================")
 	// 	fmt.Println("Error creating book record")
-	// 	fmt.Println("===================")
+	// 	fmt.Println("==========================")
 	// }
 
-	var books []book.Book
-	err = db.Debug().Where("rating =?", 5).Find(&books).Error
-	if err != nil {
-		fmt.Println("===================")
-		fmt.Println("Error get book record")
-		fmt.Println("===================")
-	}
+	// ========
+	// GET DATA
+	// ========
+	// var book book.Book
+	// err = db.Debug().Where("id =?", 1).Find(&book).Error
+	// if err != nil {
+	// 	fmt.Println("=====================")
+	// 	fmt.Println("Error get book record")
+	// 	fmt.Println("=====================")
+	// }
 
-	for _, b := range books {
-		fmt.Println("title: ", b.Title)
-		fmt.Println("book object: ", b)
-	}
+	// for _, b := range books {
+	// 	fmt.Println("title: ", b.Title)
+	// 	fmt.Println("book object: ", b)
+	// }
+
+	// ===========
+	// UPDATE DATA
+	// ===========
+	// book.Title = "Harry Potter (Revised edition)"
+	// err = db.Save(&book).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("Error update book record")
+	// 	fmt.Println("========================")
+	// }
+
+	// ===========
+	// DELETE DATA
+	// ===========
+	// err = db.Delete(&book).Error
+	// if err != nil {
+	// 	fmt.Println("========================")
+	// 	fmt.Println("Error delete book record")
+	// 	fmt.Println("========================")
+	// }
 
 	router := gin.Default()
 
