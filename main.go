@@ -20,13 +20,13 @@ func main() {
 	db.AutoMigrate(&book.Book{})
 
 	bookRepository := book.NewRepository(db)
-	book := book.Book{
-		Title:       "Lord of The Rings Revision Edition",
-		Description: "Dark Fantasy Book",
-		Price:       250000,
-		Rating:      4,
-	}
-	bookRepository.Create(book)
+	bookService := book.NewService(bookRepository)
+	bookHandler := handler.NewBookHandler(bookService)
+	// bookRequest := book.BookRequest{
+	// 	Title: "Komik One Piece",
+	// 	Price: "100000",
+	// }
+	// bookService.Create(bookRequest)
 
 	// ===========
 	// CREATE DATA
@@ -80,15 +80,22 @@ func main() {
 	// 	fmt.Println("========================")
 	// }
 
+	// 1. main
+	// 2. handler
+	// 3. service => logic bisnis atau fitur
+	// 4. repostiory
+	// 5. db lewat gorm
+	// 6. mysql
+
 	router := gin.Default()
 
 	v1 := router.Group("/v1") // API Versioning v1
 
-	v1.GET("/", handler.RootHandler)
-	v1.GET("/hello", handler.HelloHandler)
-	v1.GET("/book/:id/:title", handler.BookHandler)
-	v1.GET("/query", handler.QueryHandler)
-	v1.POST("/books", handler.PostBooksHandler)
+	v1.GET("/", bookHandler.RootHandler)
+	v1.GET("/hello", bookHandler.HelloHandler)
+	v1.GET("/book/:id/:title", bookHandler.BookHandler)
+	v1.GET("/query", bookHandler.QueryHandler)
+	v1.POST("/books", bookHandler.PostBooksHandler)
 
 	router.Run(":8888")
 }
