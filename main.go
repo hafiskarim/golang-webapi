@@ -20,6 +20,7 @@ func main() {
 	db.AutoMigrate(&book.Book{})
 
 	bookRepository := book.NewRepository(db)
+	// bookFileRepository := book.NewFileRepository()
 	bookService := book.NewService(bookRepository)
 	bookHandler := handler.NewBookHandler(bookService)
 	// bookRequest := book.BookRequest{
@@ -91,11 +92,13 @@ func main() {
 
 	v1 := router.Group("/v1") // API Versioning v1
 
-	v1.GET("/", bookHandler.RootHandler)
-	v1.GET("/hello", bookHandler.HelloHandler)
-	v1.GET("/book/:id/:title", bookHandler.BookHandler)
-	v1.GET("/query", bookHandler.QueryHandler)
-	v1.POST("/books", bookHandler.PostBooksHandler)
+	// v1.GET("/book/:id/:title", bookHandler.BookHandler)
+	// v1.GET("/query", bookHandler.QueryHandler)
+	v1.GET("/books", bookHandler.GetBooks)
+	v1.GET("book/:id", bookHandler.GetBook)
+	v1.POST("/books", bookHandler.CreateBook)
+	v1.PUT("book/:id", bookHandler.UpdateBook)
+	v1.DELETE("book/:id", bookHandler.DeleteBook)
 
 	router.Run(":8888")
 }
